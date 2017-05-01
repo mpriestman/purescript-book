@@ -52,7 +52,7 @@ We can see that this function works in PSCi:
 > countThrows 10
 [[4,6],[5,5],[6,4]]
 
-> countThrows 12  
+> countThrows 12
 [[6,6]]
 ```
 
@@ -191,7 +191,7 @@ c1 = do
 
 is equivalent to this code:
 
-```haskell  
+```haskell
 c2 = do
   x <- m1
   y <- m2
@@ -208,7 +208,7 @@ The associativity law tells us that it is safe to simplify nested do notation bl
 
 _Note_ that by the definition of how do notation gets desugared into calls to `bind`, both of `c1` and `c2` are also equivalent to this code:
 
-```haskell  
+```haskell
 c3 = do
   x <- m1
   do
@@ -277,7 +277,7 @@ safeDivide _ 0 = Nothing
 safeDivide a b = Just (a / b)
 ```
 
-Then we can use `foldM` to express iterated safe division:  
+Then we can use `foldM` to express iterated safe division:
 
 ```text
 > import Data.List
@@ -364,9 +364,9 @@ X>
 X>     ```haskell
 X>     lift2 f (pure a) (pure b) = pure (f a b)
 X>     ```
-X>     
+X>
 X>     where the `Applicative` instance uses the `ap` function defined above. Recall that `lift2` was defined as follows:
-X>    
+X>
 X>     ```haskell
 X>     lift2 :: forall f a b c. Applicative f => (a -> b -> c) -> f a -> f b -> f c
 X>     lift2 f a b = f <$> a <*> b
@@ -431,7 +431,7 @@ import Control.Monad.Eff.Console (logShow)
 main = do
   n <- random
   logShow n
-```  
+```
 
 If this file is saved as `src/Main.purs`, then it can be compiled and run using Pulp:
 
@@ -638,7 +638,7 @@ main = do
   where
     printException e = do
       log (message e)
-      return defaultConfig
+      pure defaultConfig
 ```
 
 The `purescript-eff` package also defines the `runPure` handler, which takes a computation with _no_ side-effects, and safely evaluates it as a pure value:
@@ -741,11 +741,11 @@ simulate :: Number -> Number -> Int -> Number
 simulate x0 v0 time = runPure $ runST do
   ref <- newSTRef { x: x0, v: v0 }
   forE 0 (time * 1000) \_ -> do
-    modifySTRef ref \o ->  
+    modifySTRef ref \o ->
       { v: o.v - 9.81 * 0.001
-      , x: o.x + o.v * 0.001  
+      , x: o.x + o.v * 0.001
       }
-    pure unit  
+    pure unit
   final <- readSTRef ref
   pure final.x
 ```
@@ -1036,9 +1036,9 @@ X>
 X> 1. (Easy) Modify the application to include a work phone number text box.
 X> 1. (Medium) Instead of using a `ul` element to show the validation errors in a list, modify the code to create one `div` with the `alert` style for each error.
 X> 1. (Difficult, Extended) One problem with this user interface is that the validation errors are not displayed next to the form fields they originated from. Modify the code to fix this problem.
-X>   
+X>
 X>   _Hint_: the error type returned by the validator should be extended to indicate which field caused the error. You might want to use the following modified `Errors` type:
-X>   
+X>
 X>   ```haskell
 X>   data Field = FirstNameField
 X>              | LastNameField
@@ -1046,9 +1046,9 @@ X>              | StreetField
 X>              | CityField
 X>              | StateField
 X>              | PhoneField PhoneType
-X>   
+X>
 X>   data ValidationError = ValidationError String Field
-X>   
+X>
 X>   type Errors = Array ValidationError
 X>   ```
 X>
