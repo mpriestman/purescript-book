@@ -368,7 +368,7 @@ Test this value in PSCi (this result has been formatted):
 Person
   { firstName: "John",
   , lastName: "Smith",
-  , address: Address
+  , homeAddress: Address
       { street: "123 Fake St."
       , city: "FakeTown"
       , state: "CA"
@@ -382,7 +382,7 @@ Person
                 , number: "555-555-0000"
                 }
             ]
-  }  
+  }
 ```
 
 We saw in a previous section how we could use the `Either String` functor to validate a data structure of type `Person`. For example, provided functions to validate the two names in the structure, we might validate the entire data structure as follows:
@@ -396,13 +396,13 @@ validatePerson :: Person -> Either String Person
 validatePerson (Person o) =
   person <$> (nonEmpty o.firstName *> pure o.firstName)
          <*> (nonEmpty o.lastName  *> pure o.lastName)
-         <*> pure o.address
+         <*> pure o.homeAddress
          <*> pure o.phones
 ```
 
 In the first two lines, we use the `nonEmpty` function to validate a non-empty string. `nonEmpty` returns an error (indicated with the `Left` constructor) if its input is empty, or a successful empty value (`unit`) using the `Right` constructor otherwise. We use the sequencing operator `*>` to indicate that we want to perform two validations, returning the result from the validator on the right. In this case, the validator on the right simply uses `pure` to return the input unchanged.
 
-The final lines do not perform any validation but simply provide the `address` and `phones` fields to the `person` function as the remaining arguments.
+The final lines do not perform any validation but simply provide the `homeAddress` and `phones` fields to the `person` function as the remaining arguments.
 
 This function can be seen to work in PSCi, but has a limitation which we have seen before:
 
@@ -518,7 +518,7 @@ validatePerson (Person o) =
               pure o.firstName)
          <*> (nonEmpty "Last Name"  o.lastName  *>
               pure o.lastName)
-	       <*> validateAddress o.address
+	       <*> validateAddress o.homeAddress
          <*> (arrayNonEmpty "Phone Numbers" o.phones *>
               traverse validatePhoneNumber o.phones)
 ```
@@ -609,7 +609,7 @@ X>     ```
 X>
 X>     This corresponds to an in-order traversal of the tree. What about a preorder traversal? What about reverse order?
 X>
-X> 1. (Medium) Modify the code to make the `address` field of the `Person` type optional using `Data.Maybe`. _Hint_: Use `traverse` to validate a field of type `Maybe a`.
+X> 1. (Medium) Modify the code to make the `homeAddress` field of the `Person` type optional using `Data.Maybe`. _Hint_: Use `traverse` to validate a field of type `Maybe a`.
 X> 1. (Difficult) Try to write `sequence` in terms of `traverse`. Can you write `traverse` in terms of `sequence`?
 
 ## Applicative Functors for Parallelism
